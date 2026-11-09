@@ -103,10 +103,10 @@ const PROJECTS = [
     ru: "Tulgusch — расписание, журнал оценок и дедлайны в Material 3 Expressive для Android и iOS, релизы собираются в CI."
   },
   {
-    name: "free-ai-router",
+    name: "providermux",
     lang: "Go",
     color: "#00ADD8",
-    url: "https://github.com/kyomufs/free-ai-router",
+    url: "https://github.com/kyomufs/providermux",
     badge: "OpenAI Gateway",
     colSpan: "bento-col-4",
     en: "OpenAI-compatible gateway for free AI providers: one local endpoint, many services, each spoken to the way its own client speaks.",
@@ -143,14 +143,14 @@ const PROJECTS = [
     ru: "Карта домашнего каталога, архивация и удаление сессий, правила очистки, таймер и аудит для DeepSeek Harness, плюс вкладка настроек."
   },
   {
-    name: "free-ai-router-dshplugin",
+    name: "providermux-dsh",
     lang: "JavaScript",
     color: "#f1e05a",
-    url: "https://github.com/kyomufs/free-ai-router-dshplugin",
+    url: "https://github.com/kyomufs/providermux-dsh",
     badge: "DSH Plugin Hook",
     colSpan: "bento-col-12",
-    en: "DeepSeek Harness plugin that exposes every provider served by the local free-ai-router daemon as its own route.",
-    ru: "Плагин DeepSeek Harness: каждый провайдер локального демона free-ai-router становится отдельным маршрутом."
+    en: "DeepSeek Harness plugin that exposes every provider served by the local providermux daemon as its own route.",
+    ru: "Плагин DeepSeek Harness: каждый провайдер локального демона providermux становится отдельным маршрутом."
   }
 ];
 
@@ -255,7 +255,7 @@ function renderProjects() {
           </div>
         </div>
       `;
-    } else if (project.name === "free-ai-router") {
+    } else if (project.name === "providermux") {
       microWidget = `
         <div class="pipeline-flow">
           <span class="pipeline-node">Client</span>
@@ -557,7 +557,7 @@ function setupTerminalCLI() {
         return `${title}:\n  ${cat.items.join(" · ")}`;
       }).join("\n\n");
     },
-    projects: () => "tulgusch, free-ai-router, proxprobe, dsh-md3-theme, dsh-home-guard, free-ai-router-dshplugin",
+    projects: () => "tulgusch, providermux, proxprobe, dsh-md3-theme, dsh-home-guard, providermux-dsh",
     matrix: () => `Wake up, Neo...
 The Matrix has you.
 Follow the white rabbit. 🐇
