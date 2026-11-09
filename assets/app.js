@@ -549,10 +549,14 @@ function setupTerminalCLI() {
   matrix   - 01001000 01101001 00100001
   sudo     - run superuser command
   clear    - clear this output`,
-    whoami: () => state.lang === "ru" 
-      ? "Linux · Wayland · Open Source · AI · 3 курс · ТулГУ · Открыт к стажировкам · M3 Expressive · SystemsDev" 
-      : "Linux · Wayland · Open Source · AI · 3rd year · TSU · Open to internships · M3 Expressive · SystemsDev",
-    skills: () => "C, C++, ASM, Go, TypeScript, Python, Dart, Kotlin, NixOS, Arch, Debian, Hyprland, Niri, MangoWM, Docker, PostgreSQL, AI Agents",
+    whoami: () => "Linux · Wayland · Open Source · AI · 3 курс · ТулГУ · Открыт к стажировкам · M3 Expressive · SystemsDev",
+    skills: () => {
+      const isRu = state.lang === "ru";
+      return SKILLS_DATA.map(cat => {
+        const title = isRu ? cat.ru : cat.en;
+        return `${title}:\n  ${cat.items.join(" · ")}`;
+      }).join("\n\n");
+    },
     projects: () => "tulgusch, free-ai-router, proxprobe, dsh-md3-theme, dsh-home-guard, free-ai-router-dshplugin",
     matrix: () => `Wake up, Neo...
 The Matrix has you.
