@@ -268,13 +268,28 @@ export class SkillsGraph {
       this.canvas.style.cursor = this.hoveredNode ? 'grab' : 'default';
     };
 
+    const onTouchMove = (e) => {
+      if (this.draggedNode && e.cancelable) {
+        e.preventDefault();
+      }
+      onPointerMove(e);
+    };
+
+    const onTouchStart = (e) => {
+      onPointerDown(e);
+      if (this.draggedNode && e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
     this.canvas.addEventListener('mousemove', onPointerMove);
     this.canvas.addEventListener('mousedown', onPointerDown);
     window.addEventListener('mouseup', onPointerUp);
 
-    this.canvas.addEventListener('touchmove', onPointerMove, { passive: true });
-    this.canvas.addEventListener('touchstart', onPointerDown, { passive: true });
+    this.canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    this.canvas.addEventListener('touchstart', onTouchStart, { passive: false });
     window.addEventListener('touchend', onPointerUp);
+    window.addEventListener('touchcancel', onPointerUp);
 
     window.addEventListener('resize', () => this.resize());
   }
