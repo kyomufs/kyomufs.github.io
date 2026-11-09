@@ -1,5 +1,7 @@
 /* Obsidian-style interactive force-directed graph for skills */
 
+import { SKILLS_DATA, CROSS_EDGES } from "./data/skills.js";
+
 export class SkillsGraph {
   constructor(canvas, container, getThemeColors) {
     this.canvas = canvas;
@@ -23,167 +25,79 @@ export class SkillsGraph {
   }
 
   initData() {
-    // Hubs (Categories)
-    const hubs = [
-      { id: 'cat-lang', label: 'Languages', labelRu: 'Языки', isHub: true, color: '#7aa2f7', icon: 'code', r: 18 },
-      { id: 'cat-sys', label: 'Systems & Distros', labelRu: 'Системы и Дистрибутивы', isHub: true, color: '#bb9af7', icon: 'dns', r: 18 },
-      { id: 'cat-wm', label: 'Wayland & Desktops', labelRu: 'Wayland & Десктоп', isHub: true, color: '#2ac3de', icon: 'desktop_windows', r: 18 },
-      { id: 'cat-web', label: 'Client & Mobile', labelRu: 'Клиент & Мобилка', isHub: true, color: '#7dcfff', icon: 'layers', r: 18 },
-      { id: 'cat-data', label: 'Databases', labelRu: 'Базы данных', isHub: true, color: '#73daca', icon: 'database', r: 18 },
-      { id: 'cat-net', label: 'Network Systems', labelRu: 'Сетевой стек & Edge', isHub: true, color: '#ff9e64', icon: 'hub', r: 18 },
-      { id: 'cat-ai', label: 'AI & Agents', labelRu: 'AI & Агенты', isHub: true, color: '#f7768e', icon: 'auto_awesome', r: 18 }
-    ];
-
-    const techData = [
-      // Languages
-      { id: 'c', label: 'C', cat: 'cat-lang' },
-      { id: 'cpp', label: 'C++', cat: 'cat-lang' },
-      { id: 'asm', label: 'ASM', cat: 'cat-lang' },
-      { id: 'go', label: 'Go', cat: 'cat-lang' },
-      { id: 'ts', label: 'TypeScript', cat: 'cat-lang' },
-      { id: 'js', label: 'JavaScript', cat: 'cat-lang' },
-      { id: 'py', label: 'Python', cat: 'cat-lang' },
-      { id: 'bash', label: 'Bash', cat: 'cat-lang' },
-      { id: 'r', label: 'R', cat: 'cat-lang' },
-      { id: 'dart', label: 'Dart', cat: 'cat-lang' },
-      { id: 'kotlin', label: 'Kotlin', cat: 'cat-lang' },
-
-      // Systems & Distros
-      { id: 'nixos', label: 'NixOS', cat: 'cat-sys' },
-      { id: 'arch', label: 'Arch Linux', cat: 'cat-sys' },
-      { id: 'debian', label: 'Debian', cat: 'cat-sys' },
-      { id: 'ubuntu', label: 'Ubuntu', cat: 'cat-sys' },
-      { id: 'linux', label: 'Linux', cat: 'cat-sys' },
-      { id: 'docker', label: 'Docker', cat: 'cat-sys' },
-      { id: 'caddy', label: 'Caddy', cat: 'cat-sys' },
-      { id: 'gitea', label: 'Gitea', cat: 'cat-sys' },
-      { id: 'git', label: 'Git', cat: 'cat-sys' },
-      { id: 'github', label: 'GitHub', cat: 'cat-sys' },
-
-      // Wayland & Desktops
-      { id: 'hyprland', label: 'Hyprland', cat: 'cat-wm' },
-      { id: 'niri', label: 'Niri', cat: 'cat-wm' },
-      { id: 'kde', label: 'KDE Plasma', cat: 'cat-wm' },
-      { id: 'gnome', label: 'GNOME', cat: 'cat-wm' },
-      { id: 'quickshell', label: 'Quickshell', cat: 'cat-wm' },
-      { id: 'qml', label: 'Qt / QML', cat: 'cat-wm' },
-      { id: 'layershell', label: 'Layer Shell', cat: 'cat-wm' },
-      { id: 'mangowm', label: 'MangoWM', cat: 'cat-wm' },
-
-      // Client & Mobile
-      { id: 'flutter', label: 'Flutter', cat: 'cat-web' },
-      { id: 'react', label: 'React', cat: 'cat-web' },
-      { id: 'node', label: 'Node.js', cat: 'cat-web' },
-      { id: 'compose', label: 'Jetpack Compose', cat: 'cat-web' },
-
-      // Databases
-      { id: 'postgres', label: 'PostgreSQL', cat: 'cat-data' },
-      { id: 'mysql', label: 'MySQL', cat: 'cat-data' },
-      { id: 'sqlite', label: 'SQLite', cat: 'cat-data' },
-      { id: 'sa', label: 'SQLAlchemy', cat: 'cat-data' },
-
-      // Edge & Networks
-      { id: 'routeros', label: 'RouterOS (MikroTik)', cat: 'cat-net' },
-      { id: 'openwrt', label: 'OpenWrt Stack', cat: 'cat-net' },
-      { id: 'wireguard', label: 'WireGuard / Overlays', cat: 'cat-net' },
-      { id: 'pbr', label: 'Policy Routing (PBR)', cat: 'cat-net' },
-      { id: 'vlan', label: '802.1Q VLAN Trunking', cat: 'cat-net' },
-      { id: 'mihomo', label: 'Mihomo / Clash Core', cat: 'cat-net' },
-      { id: 'doh', label: 'Encrypted DNS (DoH)', cat: 'cat-net' },
-      { id: 'nftables', label: 'nftables / Firewall', cat: 'cat-net' },
-      { id: 'keenetic', label: 'KeeneticOS', cat: 'cat-net' },
-
-      // AI & Agents
-      { id: 'dsh', label: 'DeepSeek Harness', cat: 'cat-ai' },
-      { id: 'opencode', label: 'OpenCode', cat: 'cat-ai' },
-      { id: 'hermes', label: 'Hermes Agent', cat: 'cat-ai' },
-      { id: 'copilot', label: 'Copilot', cat: 'cat-ai' },
-      { id: 'crush', label: 'Crush', cat: 'cat-ai' },
-      { id: 'lora', label: 'LoRA Fine-tuning', cat: 'cat-ai' }
-    ];
-
-    const crossEdges = [
-      ['dart', 'flutter'],
-      ['kotlin', 'compose'],
-      ['ts', 'node'],
-      ['ts', 'react'],
-      ['js', 'ts'],
-      ['nixos', 'linux'],
-      ['nixos', 'hyprland'],
-      ['nixos', 'bash'],
-      ['arch', 'linux'],
-      ['debian', 'ubuntu'],
-      ['docker', 'caddy'],
-      ['hyprland', 'quickshell'],
-      ['niri', 'layershell'],
-      ['kde', 'qml'],
-      ['quickshell', 'qml'],
-      ['cpp', 'qml'],
-      ['c', 'cpp'],
-      ['c', 'asm'],
-      ['py', 'sa'],
-      ['postgres', 'sa'],
-      ['py', 'lora'],
-      ['dsh', 'opencode'],
-      ['dsh', 'ts'],
-      ['go', 'caddy'],
-      ['wireguard', 'linux'],
-      ['nftables', 'linux'],
-      ['mihomo', 'go'],
-      ['routeros', 'openwrt'],
-      ['mangowm', 'linux']
-    ];
-
     this.nodes = [];
     this.links = [];
 
-    // Add hubs
-    hubs.forEach((h, i) => {
-      const angle = (i / hubs.length) * Math.PI * 2;
-      const dist = 175;
-      this.nodes.push({
-        id: h.id,
-        label: h.label,
-        labelRu: h.labelRu,
+    // Hubs from SKILLS_DATA
+    SKILLS_DATA.forEach((cat, i) => {
+      const angle = (i / SKILLS_DATA.length) * Math.PI * 2;
+      const dist = 185;
+      const hubNode = {
+        id: cat.id,
+        label: cat.en,
+        labelRu: cat.ru,
         isHub: true,
-        icon: h.icon,
-        color: h.color,
-        r: h.r,
+        icon: cat.icon,
+        color: cat.color,
+        r: 18,
         x: 450 + Math.cos(angle) * dist,
         y: 270 + Math.sin(angle) * dist,
         vx: 0,
         vy: 0
-      });
-    });
-
-    // Add techs
-    techData.forEach((t) => {
-      const parentHub = this.nodes.find(n => n.id === t.cat);
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 55 + Math.random() * 85;
-      const node = {
-        id: t.id,
-        label: t.label,
-        labelRu: t.label,
-        isHub: false,
-        color: parentHub ? parentHub.color : '#a9abb5',
-        r: 6.5,
-        x: (parentHub ? parentHub.x : 450) + Math.cos(angle) * dist,
-        y: (parentHub ? parentHub.y : 270) + Math.sin(angle) * dist,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2
       };
-      this.nodes.push(node);
-      this.links.push({
-        source: parentHub,
-        target: node,
-        dist: 72,
-        strength: 0.045
+      this.nodes.push(hubNode);
+
+      // Leaves
+      cat.items.forEach((item) => {
+        let normId = item.toLowerCase()
+          .replace('c++', 'cpp')
+          .replace('c#', 'csharp')
+          .replace(/[^a-z0-9]/g, '');
+        if (item === 'C') normId = 'c';
+        if (item === 'R') normId = 'r';
+        if (item.includes('WireGuard')) normId = 'wireguard';
+        if (item.includes('Mihomo')) normId = 'mihomo';
+        if (item.includes('DNS')) normId = 'doh';
+        if (item.includes('VLAN')) normId = 'vlan';
+        if (item.includes('RouterOS')) normId = 'routeros';
+        if (item.includes('OpenWrt')) normId = 'openwrt';
+        if (item.includes('Keenetic')) normId = 'keenetic';
+        if (item.includes('Routing')) normId = 'pbr';
+        if (item.includes('CI/CD')) normId = 'cicd';
+        if (item.includes('MCP')) normId = 'mcp';
+        if (item.includes('llama')) normId = 'llamacpp';
+        if (item.includes('PyTorch')) normId = 'pytorch';
+        if (item.includes('Compose')) normId = 'compose';
+        if (item.includes('SQLAlchemy')) normId = 'sa';
+        if (item.includes('Layer Shell')) normId = 'layershell';
+        if (item.includes('WebSocket')) normId = 'ws';
+
+        const leafAngle = Math.random() * Math.PI * 2;
+        const leafDist = 60 + Math.random() * 85;
+        const leafNode = {
+          id: normId,
+          label: item,
+          labelRu: item,
+          isHub: false,
+          color: cat.color,
+          r: 6.5,
+          x: hubNode.x + Math.cos(leafAngle) * leafDist,
+          y: hubNode.y + Math.sin(leafAngle) * leafDist,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2
+        };
+        this.nodes.push(leafNode);
+        this.links.push({
+          source: hubNode,
+          target: leafNode,
+          dist: 74,
+          strength: 0.045
+        });
       });
     });
 
-    // Add cross edges
-    crossEdges.forEach(([aId, bId]) => {
+    // Cross edges
+    CROSS_EDGES.forEach(([aId, bId]) => {
       const a = this.nodes.find(n => n.id === aId);
       const b = this.nodes.find(n => n.id === bId);
       if (a && b) {

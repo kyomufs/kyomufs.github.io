@@ -3,6 +3,7 @@
    Интерактив: Obsidian Force Graph, 3D Tilt Stickers, Bento Grid. */
 
 import { SkillsGraph } from "./graph.js";
+import { SKILLS_DATA } from "./data/skills.js";
 
 const I18N = {
   en: {
@@ -87,61 +88,7 @@ const I18N = {
   }
 };
 
-const SKILLS = [
-  {
-    icon: "code",
-    en: "Languages & Runtimes",
-    ru: "Языки и рантаймы",
-    items: ["C", "C++", "ASM", "Go", "TypeScript", "JavaScript", "Python", "Bash", "R", "Dart", "Kotlin"]
-  },
-  {
-    icon: "dns",
-    en: "Systems & Distros",
-    ru: "Системы и дистрибутивы",
-    items: ["NixOS", "Arch Linux", "Debian", "Ubuntu", "Linux", "Docker", "Caddy", "Git", "GitHub", "Gitea"]
-  },
-  {
-    icon: "desktop_windows",
-    en: "Wayland & Desktops",
-    ru: "Wayland & Десктоп",
-    items: ["Hyprland", "Niri", "MangoWM", "KDE Plasma", "GNOME", "Quickshell", "Qt / QML", "Layer Shell"]
-  },
-  {
-    icon: "layers",
-    en: "Client & Mobile",
-    ru: "Клиент & Мобилка",
-    items: ["Flutter", "React", "Node.js", "Jetpack Compose"]
-  },
-  {
-    icon: "database",
-    en: "Databases & Storage",
-    ru: "Базы данных",
-    items: ["PostgreSQL", "MySQL", "SQLite", "SQLAlchemy"]
-  },
-  {
-    icon: "hub",
-    en: "Network Systems & Edge Infrastructure",
-    ru: "Сетевая инфраструктура & Edge Routing",
-    items: [
-      "RouterOS (MikroTik)",
-      "OpenWrt Linux Stack",
-      "WireGuard & Mesh Overlays",
-      "Policy-Based Routing (PBR)",
-      "VLAN (802.1Q) Trunking",
-      "Reverse Proxy & TLS (Caddy)",
-      "Mihomo & Clash Cores",
-      "Encrypted DNS (DoH/DoT)",
-      "nftables / Firewalling",
-      "KeeneticOS"
-    ]
-  },
-  {
-    icon: "auto_awesome",
-    en: "AI & Autonomous Agents",
-    ru: "AI & Автономные агенты",
-    items: ["DeepSeek Harness", "OpenCode", "Hermes Agent", "Copilot", "Crush", "LoRA Fine-tuning"]
-  }
-];
+const SKILLS = SKILLS_DATA;
 
 const PROJECTS = [
   {
